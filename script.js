@@ -93,7 +93,11 @@ const closeModalHandler = (e) => {
 fetch(`${baseUrl}show/`)
 	.then((res) => res.json())
 	.then((data) => {
-		$wr.insertAdjacentHTML('afterbegin', data.map(cat => getCatHTML(cat)).join('') );
+		$wr.insertAdjacentHTML('afterbegin', data.map(cat => {
+			if (cat.id && cat.name) {
+				return getCatHTML(cat);
+			}
+		}).join('') );
 	})
 
 const createCat = () => {
@@ -204,9 +208,14 @@ const editCat = (catId) => {
 			const formDataObject = formatEditFormData(
 				Object.fromEntries(new FormData(submitEvent.target).entries()),
 			);
+
+			if (formDataObject.id) {
+				delete formDataObject.id;
+			}
 			if (formDataObject.name) {
 				delete formDataObject.name;
 			}
+
 			fetch(`${baseUrl}update/${catId}`, {
 				method: 'PUT',
 				headers: {
