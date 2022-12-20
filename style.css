@@ -57,12 +57,14 @@ header a {
 .card-body {
     width: 90%;
     padding: 0.5rem;
-    overflow: auto;
     box-sizing: border-box;
 }
 
 .card-title {
     font-size: 1.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 1.5rem;
 }
 
 .card-text {
