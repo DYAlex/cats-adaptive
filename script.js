@@ -129,7 +129,7 @@ const createCat = () => {
 		const formDataObject = formatCreateFormData(
 			Object.fromEntries(new FormData(submitEvent.target).entries()),
 		);
-        if (formDataObject.id && formDataObject.name) {
+        if (formDataObject.id && formDataObject.name && formDataObject.rate > 1 && formDataObject.rate < 11 && formDataObject.age > 0.0026 && formDataObject.age < 41) {
 
 			fetch(`${baseUrl}add/`, {
 				method: 'POST',
@@ -151,7 +151,7 @@ const createCat = () => {
 				throw Error('Ошибка при создании кота');
 			}).catch(alert);
 		} else {
-			alert('Ошибка при создании кота. Не заполнены обязательные поля в форме');
+			alert('Ошибка при создании кота. Не заполнены обязательные поля в форме или указаны данные за пределами допустимых диапазонов');
 		}
 	})
 }
@@ -216,28 +216,30 @@ const editCat = (catId) => {
 				delete formDataObject.name;
 			}
 
-			fetch(`${baseUrl}update/${catId}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(formDataObject),
-			})
-			.then((res) => {
-				if (res.status === 200) {
-					closeModalHandler(res.status);
-					document.querySelector(`[data-cat-id="${catId}"]`).remove();
-					return fetch(`${baseUrl}show/${catId}`)
-							.then((res) => res.json())
-							.then((data) => {
-								$wr.insertAdjacentHTML(
-									'afterbegin',
-									getCatHTML(data),
-								);
-							});
-				}
-				throw Error('Ошибка при изменении кота');
-			}).catch(alert);
+			if (formDataObject.rate > 1 && formDataObject.rate < 11 && formDataObject.age > 0.0026 && formDataObject.age < 41) {
+				fetch(`${baseUrl}update/${catId}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formDataObject),
+				})
+				.then((res) => {
+					if (res.status === 200) {
+						closeModalHandler(res.status);
+						document.querySelector(`[data-cat-id="${catId}"]`).remove();
+						return fetch(`${baseUrl}show/${catId}`)
+								.then((res) => res.json())
+								.then((data) => {
+									$wr.insertAdjacentHTML(
+										'afterbegin',
+										getCatHTML(data),
+									);
+								});
+					}
+					throw Error('Ошибка при изменении кота');
+				}).catch(alert);
+			}
 		})
 }
 
