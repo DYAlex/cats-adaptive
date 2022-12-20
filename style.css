@@ -30,7 +30,7 @@ header a {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .card {
@@ -231,11 +231,66 @@ textarea {
     cursor: pointer;
 }
 
+/* select  */
+.sort {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sort label {
+    line-height: 1.5rem;
+}
+
+.select {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: #404040;
+    line-height: 1.3rem;
+    padding: 0.3rem 2rem 0.3rem 0.5rem;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    appearance: none;
+    background-color: #fefefe;
+    background-image: url(img/chevron-down-solid.svg), linear-gradient(to bottom, #fefefe 0%, #fefefe 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right .7rem top 50%, 0 0;
+    background-size: .8rem auto, 100%;
+}
+
+.select:hover {
+    border-color: #404040;
+}
+
+.select:focus {
+    border-color: #fefefe;
+    box-shadow: 1px 0 5px #dcdcdc;
+    outline: none;
+}
+
+.select option {
+    font-weight: normal;
+}
+
 /* Adaptive */
 
 @media (max-width: 1024px) {
     .modal__content .btn-wr {
         flex-direction: column;
+    }
+}
+
+@media (max-width: 845px) {
+    .sort {
+        justify-content: center;
+    }
+
+    .select {
+        display: block;
     }
 }
 
