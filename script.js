@@ -1,6 +1,7 @@
 const $wr = document.querySelector('[data-wr]');
 const $modalWr = document.querySelector('[data-modal-wr]');
 const $modalContent = document.querySelector('[data-modal-content]');
+const $sortSelect = document.querySelector('[data-sort]');
 
 const CREATE_FORM_LS_KEY = 'CREATE_FORM_LS_KEY';
 
@@ -28,6 +29,8 @@ const formatEditFormData = (formDataObject) => ({
 	age: +formDataObject.age,
 	favorite: !!formDataObject.favorite,
 });
+
+let cats = [];
 
 const getCatHTML = (cat) => {
 	let like = "like";
@@ -94,7 +97,8 @@ fetch(`${baseUrl}show/`)
 	.then((res) => res.json())
 	.then((data) => {
 		$wr.insertAdjacentHTML('afterbegin', data.map(cat => {
-			if (cat.id && cat.name) {
+			if (cat.id !== null && cat.name !== '') {
+				cats.push(cat)
 				return getCatHTML(cat);
 			}
 		}).join('') );
@@ -301,6 +305,75 @@ const openModalHandler = (e) => {
 	}
 }	
 
-document.addEventListener('click', openModalHandler);
+const sortOldest = () => {
+	$wr.innerHTML = '';
+	for (let i = 0, n = cats.length; i < n; i++) {
+		$wr.innerHTML += getCatHTML(cats[i]);
+	}
+}
 
+const sortNewest = () => {
+	$wr.innerHTML = '';
+	for (let i = 0, n = cats.length; i < n; i++) {
+		$wr.innerHTML += getCatHTML(cats[n - i - 1]);
+	}
+}
+
+const sortAZ = () => {
+	$wr.innerHTML = '';
+	let sortedCats = [];
+	for (let i = 0, n = cats.length; i < n; i++) {
+		let clone = Object.assign({}, cats[i]);
+		sortedCats.push(clone);
+	}
+	sortedCats.sort(function (a, b) {
+		const aName = a.name.toUpperCase();
+		const bName = b.name.toUpperCase();
+		if (aName == bName) return 0;
+		if (aName < bName) return -1;
+		if (aName > bName) return 1;
+	});
+	for (let i = 0, n = sortedCats.length; i < n; i++) {
+		$wr.innerHTML += getCatHTML(sortedCats[i]);
+	}
+}
+
+const sortZA = () => {
+	$wr.innerHTML = '';
+
+	let sortedCats = [];
+	for (let i = 0, n = cats.length; i < n; i++) {
+		let clone = Object.assign({}, cats[i]);
+		sortedCats.push(clone);
+	}
+	sortedCats.sort(function (a, b) {
+		const aName = a.name.toUpperCase();
+		const bName = b.name.toUpperCase();
+		if (aName == bName) return 0;
+		if (aName > bName) return -1;
+		if (aName < bName) return 1;
+	});
+	for (let i = 0, n = sortedCats.length; i < n; i++) {
+		$wr.innerHTML += getCatHTML(sortedCats[i]);
+	}
+}
+
+const sortCatsHandler = (e) => {
+	const selectedOption = $sortSelect.options[$sortSelect.selectedIndex]
+	if (selectedOption.value === 'oldest') {
+		return sortOldest();
+	}
+	if (selectedOption.value === 'newest') {
+		return sortNewest();
+	}
+	if (selectedOption.value === 'az') {
+		return sortAZ();
+	}
+	if (selectedOption.value === 'za') {
+		return sortZA();
+	}
+}
+
+document.addEventListener('click', openModalHandler);
 $wr.addEventListener('click', likeCat);
+$sortSelect.addEventListener('change', sortCatsHandler);

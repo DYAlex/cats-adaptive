@@ -19,6 +19,17 @@
         <button data-open-modal="createCat" id="add-cat" type="button" class="btn add-btn">Добавить кота</button>
     </header>
     <div class="container">
+        <div class="sort">
+            <label for="sort">
+                Сортировать по
+                <select data-sort id="sort" class="select" name="sort">
+                    <option value="oldest" selected="selected">Дате добавления: старые наверху</option>
+                    <option value="newest">Дате добавления: новые наверху</option>
+                    <option value="az">Алфавиту: А-Я</option>
+                    <option value="za">Алфавиту: Я-А</option>
+                </select>
+            </label>
+        </div>
         <div data-wr class="data-wr">
         </div>
         <div data-modal-wr class="modal hidden">
